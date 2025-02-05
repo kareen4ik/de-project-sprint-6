@@ -5,8 +5,11 @@ CREATE TABLE IF NOT EXISTS STV2025011438__DWH.s_auth_history (
     event_dt                 TIMESTAMP,   
     load_dt                  TIMESTAMP,   
     load_src                 VARCHAR(20)  
-);
-
+)
+ORDER BY load_dt
+SEGMENTED BY hk_l_user_group_activity ALL NODES
+PARTITION BY load_dt::DATE
+GROUP BY calendar_hierarchy_day(load_dt::DATE, 3, 2);
 --заливаем данные
 
 INSERT INTO STV2025011438__DWH.s_auth_history(

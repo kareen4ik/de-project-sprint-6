@@ -4,7 +4,11 @@ CREATE TABLE IF NOT EXISTS STV2025011438__DWH.l_user_group_activity (
     hk_group_id              INT,               
     load_dt                  TIMESTAMP,        
     load_src                 VARCHAR(20)       
-);
+)
+ORDER BY load_dt
+SEGMENTED BY hk_l_user_group_activity ALL NODES
+PARTITION BY load_dt::DATE
+GROUP BY calendar_hierarchy_day(load_dt::DATE, 3, 2);
 
 
 --сюда же добавлю код вставки данных
